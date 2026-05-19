@@ -66,6 +66,21 @@ export class GeminiAgent {
         description: 'Use an API key with Vertex AI GenAI API',
       },
       {
+        id: AuthType.OPENAI,
+        name: 'OpenAI',
+        description: 'Use an API key with OpenAI API',
+        _meta: {
+          'api-key': {
+            provider: 'openai',
+          },
+        },
+      },
+      {
+        id: AuthType.BEDROCK,
+        name: 'Amazon Bedrock',
+        description: 'Use Amazon Bedrock with AWS credentials',
+      },
+      {
         id: AuthType.GATEWAY,
         name: 'AI API Gateway',
         description: 'Use a custom AI API Gateway',

@@ -75,6 +75,16 @@ export function AuthDialog({
       value: AuthType.USE_VERTEX_AI,
       key: AuthType.USE_VERTEX_AI,
     },
+    {
+      label: 'OpenAI',
+      value: AuthType.OPENAI,
+      key: AuthType.OPENAI,
+    },
+    {
+      label: 'Amazon Bedrock',
+      value: AuthType.BEDROCK,
+      key: AuthType.BEDROCK,
+    },
   ];
 
   if (settings.merged.security.auth.enforcedType) {

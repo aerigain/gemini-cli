@@ -15,7 +15,8 @@ export async function validateAuthMethodWithSettings(
   if (
     authMethod === AuthType.LOGIN_WITH_GOOGLE ||
     authMethod === AuthType.COMPUTE_ADC ||
-    authMethod === AuthType.GATEWAY
+    authMethod === AuthType.GATEWAY ||
+    authMethod === AuthType.OLLAMA
   ) {
     return null;
   }

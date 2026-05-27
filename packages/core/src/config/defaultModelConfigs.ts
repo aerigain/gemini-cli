@@ -119,6 +119,24 @@ export const DEFAULT_MODEL_CONFIGS: ModelConfigServiceConfig = {
         model: 'gemma-4-26b-a4b-it',
       },
     },
+    'llama3': {
+      extends: 'chat-base',
+      modelConfig: {
+        model: 'llama3',
+      },
+    },
+    'mistral': {
+      extends: 'chat-base',
+      modelConfig: {
+        model: 'mistral',
+      },
+    },
+    'phi3': {
+      extends: 'chat-base',
+      modelConfig: {
+        model: 'phi3',
+      },
+    },
 
     // Bases for the internal model configs.
     'gemini-2.5-flash-base': {
@@ -377,6 +395,27 @@ export const DEFAULT_MODEL_CONFIGS: ModelConfigServiceConfig = {
       isVisible: true,
       features: { thinking: true, multimodalToolUse: false },
     },
+    'llama3': {
+      tier: 'custom',
+      family: 'llama3',
+      isPreview: false,
+      isVisible: true,
+      features: { thinking: false, multimodalToolUse: false },
+    },
+    'mistral': {
+      tier: 'custom',
+      family: 'mistral',
+      isPreview: false,
+      isVisible: true,
+      features: { thinking: false, multimodalToolUse: false },
+    },
+    'phi3': {
+      tier: 'custom',
+      family: 'phi3',
+      isPreview: false,
+      isVisible: true,
+      features: { thinking: false, multimodalToolUse: false },
+    },
 
     // Aliases
     auto: {
@@ -423,6 +462,15 @@ export const DEFAULT_MODEL_CONFIGS: ModelConfigServiceConfig = {
     },
     'gemma-4-26b-a4b-it': {
       default: 'gemma-4-26b-a4b-it',
+    },
+    'llama3': {
+      default: 'llama3',
+    },
+    'mistral': {
+      default: 'mistral',
+    },
+    'phi3': {
+      default: 'phi3',
     },
 
     'gemini-3.1-pro-preview': {

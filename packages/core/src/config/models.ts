@@ -77,6 +77,10 @@ export const VALID_GEMINI_MODELS = new Set([
 
   GEMMA_4_31B_IT_MODEL,
   GEMMA_4_26B_A4B_IT_MODEL,
+
+  'llama3',
+  'mistral',
+  'phi3',
 ]);
 
 /** @deprecated Use GEMINI_MODEL_ALIAS_AUTO instead. */

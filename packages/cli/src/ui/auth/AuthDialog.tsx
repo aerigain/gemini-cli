@@ -85,6 +85,11 @@ export function AuthDialog({
       value: AuthType.BEDROCK,
       key: AuthType.BEDROCK,
     },
+    {
+      label: 'Ollama',
+      value: AuthType.OLLAMA,
+      key: AuthType.OLLAMA,
+    },
   ];
 
   if (settings.merged.security.auth.enforcedType) {

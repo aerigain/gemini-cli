@@ -137,6 +137,24 @@ export const DEFAULT_MODEL_CONFIGS: ModelConfigServiceConfig = {
         model: 'phi3',
       },
     },
+    'nova-pro': {
+      extends: 'chat-base',
+      modelConfig: {
+        model: 'us.amazon.nova-pro-v1:0',
+      },
+    },
+    'nova-lite': {
+      extends: 'chat-base',
+      modelConfig: {
+        model: 'us.amazon.nova-lite-v1:0',
+      },
+    },
+    'nova-micro': {
+      extends: 'chat-base',
+      modelConfig: {
+        model: 'us.amazon.nova-micro-v1:0',
+      },
+    },
 
     // Bases for the internal model configs.
     'gemini-2.5-flash-base': {
@@ -416,6 +434,30 @@ export const DEFAULT_MODEL_CONFIGS: ModelConfigServiceConfig = {
       isVisible: true,
       features: { thinking: false, multimodalToolUse: false },
     },
+    'us.amazon.nova-pro-v1:0': {
+      displayName: 'Amazon Bedrock Nova Pro',
+      tier: 'pro',
+      family: 'nova',
+      isPreview: false,
+      isVisible: true,
+      features: { thinking: true, multimodalToolUse: true },
+    },
+    'us.amazon.nova-lite-v1:0': {
+      displayName: 'Amazon Bedrock Nova Lite',
+      tier: 'pro',
+      family: 'nova',
+      isPreview: false,
+      isVisible: true,
+      features: { thinking: true, multimodalToolUse: true },
+    },
+    'us.amazon.nova-micro-v1:0': {
+      displayName: 'Amazon Bedrock Nova Micro',
+      tier: 'pro',
+      family: 'nova',
+      isPreview: false,
+      isVisible: true,
+      features: { thinking: false, multimodalToolUse: true },
+    },
 
     // Aliases
     auto: {
@@ -471,6 +513,24 @@ export const DEFAULT_MODEL_CONFIGS: ModelConfigServiceConfig = {
     },
     'phi3': {
       default: 'phi3',
+    },
+    'nova-pro': {
+      default: 'us.amazon.nova-pro-v1:0',
+    },
+    'nova-lite': {
+      default: 'us.amazon.nova-lite-v1:0',
+    },
+    'nova-micro': {
+      default: 'us.amazon.nova-micro-v1:0',
+    },
+    'us.amazon.nova-pro-v1:0': {
+      default: 'us.amazon.nova-pro-v1:0',
+    },
+    'us.amazon.nova-lite-v1:0': {
+      default: 'us.amazon.nova-lite-v1:0',
+    },
+    'us.amazon.nova-micro-v1:0': {
+      default: 'us.amazon.nova-micro-v1:0',
     },
 
     'gemini-3.1-pro-preview': {

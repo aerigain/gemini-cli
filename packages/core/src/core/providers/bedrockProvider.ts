@@ -13,15 +13,16 @@ import {
   type Tool,
   type ContentBlock,
 } from '@aws-sdk/client-bedrock-runtime';
-import type {
-  GenerateContentParameters,
-  GenerateContentResponse,
-  CountTokensParameters,
-  CountTokensResponse,
-  EmbedContentParameters,
-  EmbedContentResponse,
-  Content,
-  Part,
+import {
+  type GenerateContentParameters,
+  type GenerateContentResponse,
+  type CountTokensParameters,
+  type CountTokensResponse,
+  type EmbedContentParameters,
+  type EmbedContentResponse,
+  type Content,
+  type Part,
+  FinishReason,
 } from '@google/genai';
 import type { ContentGenerator } from '../contentGenerator.js';
 import type { LlmRole } from '../../telemetry/llmRole.js';
@@ -40,8 +41,8 @@ export class BedrockContentGenerator implements ContentGenerator {
     _userPromptId: string,
     _role: LlmRole,
   ): Promise<GenerateContentResponse> {
-    const messages = this.mapContentsToMessages(request.contents);
-    const system = this.mapSystemInstruction(request.config?.systemInstruction);
+    const messages = this.mapContentsToMessages(request.contents as Content[]);
+    const system = this.mapSystemInstruction(request.config?.systemInstruction as any);
     const toolConfig = this.mapTools(request.config?.tools);
 
     const command = new ConverseCommand({
@@ -66,8 +67,8 @@ export class BedrockContentGenerator implements ContentGenerator {
     _userPromptId: string,
     _role: LlmRole,
   ): Promise<AsyncGenerator<GenerateContentResponse>> {
-    const messages = this.mapContentsToMessages(request.contents);
-    const system = this.mapSystemInstruction(request.config?.systemInstruction);
+    const messages = this.mapContentsToMessages(request.contents as Content[]);
+    const system = this.mapSystemInstruction(request.config?.systemInstruction as any);
     const toolConfig = this.mapTools(request.config?.tools);
 
     const command = new ConverseStreamCommand({
@@ -88,7 +89,6 @@ export class BedrockContentGenerator implements ContentGenerator {
   }
 
   async countTokens(_request: CountTokensParameters): Promise<CountTokensResponse> {
-    // Bedrock doesn't have a standalone token count API that matches Gemini's exactly.
     return { totalTokens: 0 };
   }
 
@@ -112,15 +112,15 @@ export class BedrockContentGenerator implements ContentGenerator {
             toolUse: {
               toolUseId: `call_${Math.random().toString(36).substring(7)}`,
               name: part.functionCall.name,
-              input: part.functionCall.args,
+              input: part.functionCall.args as any,
             },
           });
         }
         if (part.functionResponse) {
           contentBlocks.push({
             toolResult: {
-              toolUseId: 'unknown', // Limitation again
-              content: [{ json: part.functionResponse.response }],
+              toolUseId: 'unknown',
+              content: [{ json: part.functionResponse.response as any }],
               status: 'success',
             },
           });
@@ -146,7 +146,7 @@ export class BedrockContentGenerator implements ContentGenerator {
       text = systemInstruction;
     } else if (Array.isArray(systemInstruction)) {
       text = systemInstruction.map(p => p.text || '').join('\n');
-    } else if ('parts' in systemInstruction) {
+    } else if ('parts' in systemInstruction && systemInstruction.parts) {
       text = systemInstruction.parts.map(p => p.text || '').join('\n');
     } else {
       text = (systemInstruction as Part).text || '';
@@ -167,7 +167,7 @@ export class BedrockContentGenerator implements ContentGenerator {
               name: fd.name,
               description: fd.description,
               inputSchema: {
-                json: fd.parameters,
+                json: fd.parameters as any,
               },
             },
           });
@@ -211,7 +211,7 @@ export class BedrockContentGenerator implements ContentGenerator {
         candidatesTokenCount: response.usage?.outputTokens,
         totalTokenCount: response.usage?.totalTokens,
       },
-    };
+    } as GenerateContentResponse;
   }
 
   private async *mapStreamResponse(stream: any): AsyncGenerator<GenerateContentResponse> {
@@ -224,10 +224,6 @@ export class BedrockContentGenerator implements ContentGenerator {
 
       if (event.contentBlockDelta?.delta?.text) {
         parts.push({ text: event.contentBlockDelta.delta.text });
-      }
-
-      if (event.contentBlockStart?.start?.toolUse) {
-          // Tool use start
       }
 
       if (event.messageStop?.stopReason) {
@@ -254,19 +250,19 @@ export class BedrockContentGenerator implements ContentGenerator {
             candidatesTokenCount: usage.outputTokens,
             totalTokenCount: usage.totalTokens,
           } : undefined,
-        };
+        } as GenerateContentResponse;
       }
     }
   }
 
-  private mapFinishReason(reason?: string): any {
+  private mapFinishReason(reason?: string): FinishReason {
     switch (reason) {
-      case 'end_turn': return 'STOP';
-      case 'max_tokens': return 'MAX_TOKENS';
-      case 'stop_sequence': return 'STOP';
-      case 'tool_use': return 'STOP';
-      case 'content_filtered': return 'SAFETY';
-      default: return 'OTHER';
+      case 'end_turn': return FinishReason.STOP;
+      case 'max_tokens': return FinishReason.MAX_TOKENS;
+      case 'stop_sequence': return FinishReason.STOP;
+      case 'tool_use': return FinishReason.STOP;
+      case 'content_filtered': return FinishReason.SAFETY;
+      default: return FinishReason.OTHER;
     }
   }
 }

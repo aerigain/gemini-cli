@@ -65,6 +65,10 @@ export const DEFAULT_GEMINI_FLASH_LITE_MODEL = 'gemini-2.5-flash-lite';
 export const GEMMA_4_31B_IT_MODEL = 'gemma-4-31b-it';
 export const GEMMA_4_26B_A4B_IT_MODEL = 'gemma-4-26b-a4b-it';
 
+export const AMAZON_NOVA_PRO_V1_MODEL = 'us.amazon.nova-pro-v1:0';
+export const AMAZON_NOVA_LITE_V1_MODEL = 'us.amazon.nova-lite-v1:0';
+export const AMAZON_NOVA_MICRO_V1_MODEL = 'us.amazon.nova-micro-v1:0';
+
 export const VALID_GEMINI_MODELS = new Set([
   PREVIEW_GEMINI_MODEL,
   PREVIEW_GEMINI_3_1_MODEL,
@@ -77,6 +81,10 @@ export const VALID_GEMINI_MODELS = new Set([
 
   GEMMA_4_31B_IT_MODEL,
   GEMMA_4_26B_A4B_IT_MODEL,
+
+  AMAZON_NOVA_PRO_V1_MODEL,
+  AMAZON_NOVA_LITE_V1_MODEL,
+  AMAZON_NOVA_MICRO_V1_MODEL,
 
   'llama3',
   'mistral',

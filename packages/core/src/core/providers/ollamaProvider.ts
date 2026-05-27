@@ -33,7 +33,7 @@ export class OllamaContentGenerator implements ContentGenerator {
     _userPromptId: string,
     _role: LlmRole,
   ): Promise<GenerateContentResponse> {
-    const messages = this.mapContentsToMessages(request.contents as Content[], request.config?.systemInstruction);
+    const messages = this.mapContentsToMessages(request.contents as Content[], request.config?.systemInstruction as any);
     const tools = this.mapTools(request.config?.tools);
 
     const response = await this.client.chat({
@@ -57,7 +57,7 @@ export class OllamaContentGenerator implements ContentGenerator {
     _userPromptId: string,
     _role: LlmRole,
   ): Promise<AsyncGenerator<GenerateContentResponse>> {
-    const messages = this.mapContentsToMessages(request.contents as Content[], request.config?.systemInstruction);
+    const messages = this.mapContentsToMessages(request.contents as Content[], request.config?.systemInstruction as any);
     const tools = this.mapTools(request.config?.tools);
 
     const stream = await this.client.chat({
@@ -163,7 +163,7 @@ export class OllamaContentGenerator implements ContentGenerator {
             function: {
               name: fd.name,
               description: fd.description,
-              parameters: fd.parameters,
+              parameters: fd.parameters as any,
             },
           });
         }

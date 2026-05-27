@@ -7,7 +7,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { OllamaContentGenerator } from './ollamaProvider.js';
 import { LlmRole } from '../../telemetry/llmRole.js';
-import { FinishReason } from '@google/genai';
 
 // Mock Ollama
 vi.mock('ollama', () => {

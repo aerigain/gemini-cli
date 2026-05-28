@@ -32,6 +32,7 @@ import { getVersion, resolveModel } from '../../index.js';
 import type { LlmRole } from '../telemetry/llmRole.js';
 import { OpenAIContentGenerator } from './providers/openAiProvider.js';
 import { BedrockContentGenerator } from './providers/bedrockProvider.js';
+import { OllamaContentGenerator } from './providers/ollamaProvider.js';
 
 /**
  * Interface abstracting the core functionalities for generating content and counting tokens.
@@ -69,6 +70,7 @@ export enum AuthType {
   GATEWAY = 'gateway',
   OPENAI = 'openai',
   BEDROCK = 'bedrock',
+  OLLAMA = 'ollama',
 }
 
 /**
@@ -93,6 +95,9 @@ export function getAuthTypeFromEnv(): AuthType | undefined {
   }
   if (process.env['AWS_ACCESS_KEY_ID'] || process.env['AWS_PROFILE']) {
     return AuthType.BEDROCK;
+  }
+  if (process.env['OLLAMA_BASE_URL']) {
+    return AuthType.OLLAMA;
   }
   if (process.env['GOOGLE_GEMINI_BASE_URL']) {
     return AuthType.GATEWAY;
@@ -193,6 +198,11 @@ export async function createContentGeneratorConfig(
     // Bedrock usually uses AWS credentials (env vars or profile), 
     // so we don't necessarily need an 'apiKey' field here, 
     // but we can pass whatever is provided.
+    return contentGeneratorConfig;
+  }
+
+  if (authType === AuthType.OLLAMA) {
+    contentGeneratorConfig.baseUrl = process.env['OLLAMA_BASE_URL'] || baseUrl;
     return contentGeneratorConfig;
   }
 
@@ -328,6 +338,13 @@ export async function createContentGenerator(
     if (config.authType === AuthType.BEDROCK) {
       return new LoggingContentGenerator(
         new BedrockContentGenerator(process.env['AWS_REGION']),
+        gcConfig,
+      );
+    }
+
+    if (config.authType === AuthType.OLLAMA) {
+      return new LoggingContentGenerator(
+        new OllamaContentGenerator(config.baseUrl),
         gcConfig,
       );
     }

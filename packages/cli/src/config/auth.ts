@@ -7,6 +7,12 @@
 import { AuthType, loadApiKey } from '@google/gemini-cli-core';
 import { loadEnvironment, loadSettings } from './settings.js';
 
+export async function validateAuthMethod(
+  authMethod: AuthType,
+): Promise<string | null> {
+  return validateAuthMethodWithSettings(authMethod, undefined);
+}
+
 export async function validateAuthMethodWithSettings(
   authMethod: AuthType,
   settings: any,
@@ -21,7 +27,7 @@ export async function validateAuthMethodWithSettings(
   }
 
   if (authMethod === AuthType.USE_GEMINI) {
-    const apiKey = await loadApiKey(settings);
+    const apiKey = await loadApiKey();
     if (!apiKey && !process.env['GEMINI_API_KEY']) {
       return (
         'When using Gemini API key, you must specify the GEMINI_API_KEY environment variable\n' +

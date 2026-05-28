@@ -62,9 +62,14 @@ export async function validateAuthMethodWithSettings(
 
   if (authMethod === AuthType.BEDROCK) {
     // Bedrock typically uses AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, etc.
-    // or AWS_PROFILE.
-    if (!process.env['AWS_ACCESS_KEY_ID'] && !process.env['AWS_PROFILE']) {
-      return 'When using Bedrock, you must specify AWS credentials (e.g., AWS_ACCESS_KEY_ID or AWS_PROFILE).';
+    // or AWS_PROFILE, or IRSA (AWS_ROLE_ARN).
+    if (
+      !process.env['AWS_ACCESS_KEY_ID'] &&
+      !process.env['AWS_PROFILE'] &&
+      !process.env['AWS_ROLE_ARN'] &&
+      !process.env['AWS_WEB_IDENTITY_TOKEN_FILE']
+    ) {
+      return 'When using Bedrock, you must specify AWS credentials (e.g., AWS_ACCESS_KEY_ID, AWS_PROFILE, or AWS_ROLE_ARN).';
     }
     return null;
   }

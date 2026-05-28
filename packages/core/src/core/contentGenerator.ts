@@ -93,7 +93,12 @@ export function getAuthTypeFromEnv(): AuthType | undefined {
   if (process.env['OPENAI_API_KEY']) {
     return AuthType.OPENAI;
   }
-  if (process.env['AWS_ACCESS_KEY_ID'] || process.env['AWS_PROFILE']) {
+  if (
+    process.env['AWS_ACCESS_KEY_ID'] ||
+    process.env['AWS_PROFILE'] ||
+    process.env['AWS_ROLE_ARN'] ||
+    process.env['AWS_WEB_IDENTITY_TOKEN_FILE']
+  ) {
     return AuthType.BEDROCK;
   }
   if (process.env['OLLAMA_BASE_URL']) {

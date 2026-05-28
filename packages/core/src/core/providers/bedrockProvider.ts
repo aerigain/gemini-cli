@@ -44,8 +44,9 @@ export class BedrockContentGenerator implements ContentGenerator {
     const system = this.mapSystemInstruction(request.config?.systemInstruction as any);
     const toolConfig = this.mapTools(request.config?.tools);
 
+    const modelId = request.model.startsWith('bedrock/') ? request.model.slice(8) : request.model;
     const command = new ConverseCommand({
-      modelId: request.model,
+      modelId,
       messages,
       system,
       inferenceConfig: {
@@ -70,8 +71,9 @@ export class BedrockContentGenerator implements ContentGenerator {
     const system = this.mapSystemInstruction(request.config?.systemInstruction as any);
     const toolConfig = this.mapTools(request.config?.tools);
 
+    const modelId = request.model.startsWith('bedrock/') ? request.model.slice(8) : request.model;
     const command = new ConverseStreamCommand({
-      modelId: request.model,
+      modelId,
       messages,
       system,
       inferenceConfig: {
@@ -181,12 +183,17 @@ export class BedrockContentGenerator implements ContentGenerator {
     for (const tool of tools) {
       if (tool.functionDeclarations) {
         for (const fd of tool.functionDeclarations) {
+          const parameters = fd.parameters as any;
+          // Bedrock requires non-empty inputSchema. Skip if no properties.
+          if (!parameters || !parameters.properties || Object.keys(parameters.properties).length === 0) {
+            continue;
+          }
           bedrockTools.push({
             toolSpec: {
               name: fd.name,
               description: fd.description,
               inputSchema: {
-                json: fd.parameters as any,
+                json: parameters,
               },
             },
           });
